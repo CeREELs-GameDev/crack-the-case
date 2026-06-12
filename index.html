@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Escape Room</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -67,19 +68,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 #popup{position:fixed;z-index:60;top:50%;left:50%;
   --popup-scale:1;--popup-enter-scale:.92;
   transform:translate(-50%,-50%) scale(var(--popup-enter-scale));opacity:0;pointer-events:none;
-  transition:opacity .25s, transform .25s;width:min(1220px,96vw);
-  display:grid;grid-template-columns:minmax(0,940px) 300px;align-items:center;gap:24px;}
+  transition:opacity .25s, transform .25s;width:min(1224px,96vw);
+  display:grid;grid-template-columns:minmax(0,840px) 360px;align-items:center;gap:24px;}
 #popup.on{opacity:1;pointer-events:none;transform:translate(-50%,-50%) scale(var(--popup-scale));}
 #puzzle-stack{width:100%;display:grid;justify-items:end;pointer-events:none;}
 .pz{display:none;width:100%;justify-items:end;pointer-events:none;}
 .pz.show{display:grid;}
-#puzzle-doc{width:300px;max-height:78vh;background:transparent;pointer-events:none;}
-.doc-paper{max-height:78vh;overflow:auto;background:var(--manila);border-radius:3px;padding:16px 16px 20px;
-  box-shadow:2px 3px 14px rgba(0,0,0,.5);pointer-events:auto;}
-.doc-stamp{font-family:var(--font-ui);font-size:9px;color:#6a1008;border:1.5px solid #6a1008;
-  padding:2px 7px;display:inline-block;transform:rotate(-1.5deg);margin-bottom:12px;letter-spacing:2px;opacity:.75;}
-.doc-title{font-family:var(--font-title);font-size:14px;color:#0a0e14;font-weight:700;margin-bottom:12px;}
-.doc-text{font-family:var(--font-copy);font-size:15px;line-height:2.05;color:#0a0e14;}
+#puzzle-doc{width:360px;max-height:82vh;background:transparent;pointer-events:none;}
+.doc-paper{max-height:82vh;overflow:auto;background:var(--manila);border-radius:3px;padding:22px 22px 26px;
+  box-shadow:2px 3px 14px rgba(0,0,0,.5);pointer-events:auto;display:flex;flex-direction:column;align-items:flex-start;}
+.doc-title{width:100%;font-family:var(--font-note);font-size:22px;color:#0a0e14;font-weight:700;margin:0 0 12px;text-align:left;line-height:1.1;}
+.doc-text{width:100%;font-family:var(--font-note);font-size:22px;font-weight:700;line-height:1.45;color:#0a0e14;text-align:left;}
 .doc-red{border-bottom:2.5px solid #e03020;font-weight:600;}
 @media (max-width:900px){
   #popup{width:min(92vw,680px);grid-template-columns:1fr;}
@@ -95,17 +94,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 @keyframes wireWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 18px rgba(235,30,20,.9)) saturate(1.45) hue-rotate(-18deg)}}
 .wm-hint{position:absolute;top:22.4%;left:50%;transform:translate(-50%,-50%);width:84%;height:11.6%;
   display:flex;align-items:center;justify-content:center;padding:0 2%;text-align:center;line-height:1.15;
-  font-family:var(--font-note);font-size:var(--type-hint);letter-spacing:.2px;color:rgba(25,35,50,.95);}
+  font-family:var(--font-note);font-size:26px;font-weight:700;letter-spacing:.2px;color:rgba(25,35,50,.95);}
 .wm-word{position:absolute;left:82.8%;transform:translate(-50%,-50%);width:17.3%;height:6.9%;padding:0;white-space:nowrap;
   background:transparent;border:none;cursor:pointer;text-align:center;display:grid;place-items:center;line-height:1;
-  font-family:var(--font-ui);font-size:var(--type-control);letter-spacing:.3px;color:rgba(20,28,40,.9);}
+  font-family:var(--font-note);font-size:18px;font-weight:700;letter-spacing:0;color:rgba(20,28,40,.9);}
 .wm-line{position:absolute;left:38%;transform:translate(-50%,-50%);width:60%;height:6.5%;
   background:transparent;border:none;cursor:pointer;padding:0;}
 .wm-word:hover{color:#000;}
 .wm-word.sel{color:#fff;text-shadow:0 0 3px #000,0 0 5px #000;font-weight:700;}
 .wm-cut{position:absolute;top:87.5%;left:48.7%;transform:translate(-50%,-50%);width:36.6%;height:12.4%;white-space:nowrap;
   background:transparent;border:none;cursor:pointer;display:grid;place-items:center;line-height:1;
-  font-family:var(--font-ui);font-size:var(--type-action);letter-spacing:.5px;color:rgba(20,28,40,.9);}
+  font-family:var(--font-note);font-size:30px;font-weight:700;letter-spacing:0;color:rgba(20,28,40,.9);}
 .wm-cut:hover{color:#000;}
 .wm-cut:active{transform:translate(-50%,-50%) scale(.95);}
 /* 모듈 패널 */
@@ -149,7 +148,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 @keyframes dialWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
 .dial-hint{position:absolute;top:27.7%;left:49.8%;width:84.4%;height:14.7%;transform:translate(-50%,-50%);
   display:grid;place-items:center;text-align:center;padding:0 4%;line-height:1.15;
-  font-family:var(--font-note);font-size:14px;color:rgba(20,28,40,.94);}
+  font-family:var(--font-note);font-size:24px;font-weight:700;color:rgba(20,28,40,.94);}
 .dial-step{position:absolute;left:37.6%;width:13.4%;height:16.7%;transform:translate(-50%,-50%);
   background:transparent;border:none;padding:0;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;}
 .dial-step img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;}
@@ -163,7 +162,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 .dial-value span{display:block;line-height:1;transform:translateY(.24em);}
 .dial-confirm{position:absolute;left:48.8%;top:82.6%;width:36.5%;height:15.4%;transform:translate(-50%,-50%);
   background:transparent;border:none;cursor:pointer;display:grid;place-items:center;text-align:center;line-height:1;outline:none;padding-top:.18em;
-  font-family:var(--font-ui);font-size:12px;letter-spacing:2px;color:rgba(20,28,40,.86);}
+  font-family:var(--font-note);font-size:22px;font-weight:700;letter-spacing:0;color:rgba(20,28,40,.86);}
 .dial-confirm:hover,.dial-confirm:focus,.dial-confirm:focus-visible{color:#000;background:transparent;outline:none;}
 .dial-confirm:active{transform:translate(-50%,-50%) scale(.96);background:transparent;outline:none;}
 .dbtn{width:36px;height:28px;border-radius:4px;background:linear-gradient(180deg,var(--btn),var(--btn-shadow));
@@ -172,13 +171,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 .dbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3);}
 
 /* SWITCHES */
-.switch-mod{position:relative;width:100%;max-width:620px;aspect-ratio:589/527;pointer-events:auto;}
+.switch-mod{position:relative;width:100%;max-width:620px;aspect-ratio:585/523;pointer-events:auto;}
 .switch-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
 .switch-mod.wrong{animation:switchWrong .4s ease;}
 @keyframes switchWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
 .switch-hint{position:absolute;top:21.8%;left:49.7%;width:84.5%;height:11.2%;transform:translate(-50%,-50%);
   display:grid;place-items:center;text-align:center;padding:0 4%;line-height:1.15;
-  font-family:var(--font-note);font-size:15px;color:rgba(20,28,40,.94);}
+  font-family:var(--font-note);font-size:24px;font-weight:700;color:rgba(20,28,40,.94);}
 .switch-toggle{position:absolute;left:var(--x);top:var(--y);width:11.2%;height:19.9%;transform:translate(-50%,-50%);
   background:transparent;border:none;padding:0;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;}
 .switch-toggle img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;}
@@ -186,33 +185,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 .switch-toggle:active{transform:translate(-50%,-50%) scale(.96);background:transparent;outline:none;}
 .switch-label{position:absolute;left:var(--x);top:calc(var(--y) + 11.4%);width:24%;height:6.5%;
   transform:translate(-50%,-50%);display:grid;place-items:center;text-align:center;line-height:1;
-  font-family:var(--font-note);font-size:14px;font-weight:700;color:rgba(240,228,200,.86);}
-.switch-confirm{position:absolute;left:49.6%;top:87.8%;width:37%;height:11.8%;transform:translate(-50%,-50%);
-  background:transparent;border:none;cursor:pointer;display:grid;place-items:center;text-align:center;line-height:1;outline:none;
-  font-family:var(--font-ui);font-size:12px;letter-spacing:2px;color:rgba(20,28,40,.86);}
-.switch-confirm:hover,.switch-confirm:focus,.switch-confirm:focus-visible{color:#000;background:transparent;outline:none;}
-.switch-confirm:active{transform:translate(-50%,-50%) scale(.96);background:transparent;outline:none;}
-
+  font-family:var(--font-note);font-size:20px;font-weight:700;color:rgba(240,228,200,.9);}
 /* KEYPAD */
-.keypad-mod{position:relative;width:100%;max-width:620px;aspect-ratio:589/557;pointer-events:auto;}
+.keypad-mod{position:relative;width:100%;max-width:620px;aspect-ratio:585/553;pointer-events:auto;}
 .keypad-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
 .keypad-mod.wrong{animation:keypadWrong .4s ease;}
 @keyframes keypadWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
 .keypad-hint{position:absolute;top:22%;left:50%;width:84.5%;height:14.5%;transform:translate(-50%,-50%);
   display:grid;place-items:center;text-align:center;padding:0 5%;line-height:1.12;
-  font-family:var(--font-note);font-size:13px;color:rgba(20,28,40,.94);}
+  font-family:var(--font-note);font-size:24px;font-weight:700;color:rgba(20,28,40,.94);}
 .kp-display{position:absolute;left:49.5%;top:38.6%;width:85.4%;height:11.5%;transform:translate(-50%,-50%);
-  display:grid;place-items:center;text-align:center;line-height:1;padding:.1em 0 0 .24em;
-  font-family:var(--font-ui);font-size:24px;color:var(--led-red);letter-spacing:14px;}
+  display:flex;align-items:center;justify-content:center;text-align:center;line-height:1;padding:.1em 0 0 .24em;
+  color:var(--led-red);}
+.kp-slots{font-family:var(--font-ui);font-size:24px;letter-spacing:14px;white-space:pre;}
+.kp-extra{font-family:var(--font-note);font-size:34px;font-weight:700;letter-spacing:3px;margin-left:18px;transform:translateY(-.03em);}
 .key-hit{position:absolute;left:var(--x);top:var(--y);width:19%;height:8.7%;transform:translate(-50%,-50%);
   background:transparent;border:none;padding:0;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;}
 .key-hit:hover,.key-hit:focus,.key-hit:focus-visible{background:transparent;outline:none;}
 .key-hit:active{transform:translate(-50%,-50%) scale(.96);background:transparent;outline:none;}
-.keypad-confirm{position:absolute;left:48.8%;top:87.5%;width:36.5%;height:11%;transform:translate(-50%,-50%);
-  background:transparent;border:none;cursor:pointer;display:grid;place-items:center;text-align:center;line-height:1;outline:none;padding-top:.18em;
-  font-family:var(--font-ui);font-size:12px;letter-spacing:2px;color:rgba(20,28,40,.86);}
-.keypad-confirm:hover,.keypad-confirm:focus,.keypad-confirm:focus-visible{color:#000;background:transparent;outline:none;}
-.keypad-confirm:active{transform:translate(-50%,-50%) scale(.96);background:transparent;outline:none;}
 
 /* SEATING */
 .seat-mod{position:relative;width:100%;max-width:620px;aspect-ratio:1181/1239;pointer-events:auto;}
@@ -221,18 +211,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 @keyframes seatWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
 .seat-hint{position:absolute;top:20%;left:50.3%;width:84.5%;height:10.5%;transform:translate(-50%,-50%);
   display:flex;align-items:center;justify-content:center;text-align:center;padding:0 4%;line-height:1.15;
-  font-family:var(--font-note);font-size:13px;color:rgba(20,28,40,.92);}
+  font-family:var(--font-note);font-size:22px;font-weight:700;color:rgba(20,28,40,.92);}
 .seat-choice{position:absolute;left:54.9%;top:var(--y);width:42.6%;height:11.2%;transform:translateY(-50%);}
 .seat-val{position:absolute;left:0;top:0;width:68.5%;height:100%;
   display:grid;place-items:center;text-align:center;padding:0;
-  font-family:var(--font-copy);font-size:16px;font-style:italic;color:rgba(20,28,40,.9);line-height:1;}
+  font-family:var(--font-note);font-size:24px;font-weight:700;font-style:normal;color:rgba(20,28,40,.9);line-height:1;}
 .seat-next{position:absolute;right:0;top:0;width:31.5%;height:100%;
   background:transparent;border:none;cursor:pointer;padding:0;outline:none;-webkit-tap-highlight-color:transparent;}
 .seat-next:hover,.seat-next:focus,.seat-next:focus-visible{background:transparent;outline:none;}
 .seat-next:active{transform:scale(.96);background:transparent;outline:none;}
 .seat-confirm{position:absolute;left:50%;top:86.1%;width:35.5%;height:11%;transform:translate(-50%,-50%);
   background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1;
-  font-family:var(--font-ui);font-size:12px;letter-spacing:2px;color:rgba(20,28,40,.86);}
+  font-family:var(--font-note);font-size:22px;font-weight:700;letter-spacing:0;color:rgba(20,28,40,.86);}
 .seat-confirm:hover{color:#000;}
 .seat-confirm:active{transform:translate(-50%,-50%) scale(.96);}
 
@@ -245,7 +235,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 
 
 /* ── START / WIN / LOCKED ── */
-#start,#locked,#win{position:fixed;inset:0;z-index:300;background:rgba(10,14,20,.96);
+#locked,#win{position:fixed;inset:0;z-index:300;background:rgba(10,14,20,.96);
   display:flex;align-items:center;justify-content:center;transition:opacity .5s;}
 #locked,#win{opacity:0;pointer-events:none;}
 #locked.show,#win.show{opacity:1;pointer-events:all;}
@@ -311,7 +301,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
       <img class="wm-layer wm-wire" id="w-LOOKED"   src="assets/wire-white-c.png" alt="">
       <img class="wm-layer wm-wire" id="w-SMILED"   src="assets/wire-yellow-c.png" alt="">
       <img class="wm-layer wm-wire" id="w-GLIMPSED" src="assets/wire-black-c.png" alt="">
-      <div class="wm-hint">Look at the word underlined in red. Cut the wires that do NOT mean the same thing.</div>
+      <div class="wm-hint">Cut the wires that are different from "glanced."</div>
       <button class="wm-word" id="wb-PEEKED"   style="top:36.3%" onclick="selWire('PEEKED')">PEEKED</button>
       <button class="wm-word" id="wb-WALKED"   style="top:45.7%" onclick="selWire('WALKED')">WALKED</button>
       <button class="wm-word" id="wb-LOOKED"   style="top:55.2%" onclick="selWire('LOOKED')">LOOKED</button>
@@ -332,7 +322,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="dial-mod" id="pn1">
       <img class="dial-layer" src="assets/dial-panel-c.png" alt="">
       <div class="sol-ov" id="so1">✓</div>
-      <div class="dial-hint">How old will Frannie be on her next birthday? Set the dial to that number.</div>
+      <div class="dial-hint">How old is Frannie on her next birthday?</div>
       <button class="dial-step plus" onclick="dDial(1)" aria-label="Increase dial"><img src="assets/dial-plus-c.png" alt=""></button>
       <button class="dial-step minus" onclick="dDial(-1)" aria-label="Decrease dial"><img src="assets/dial-minus-c.png" alt=""></button>
       <div class="dial-value"><span id="dv">1</span></div>
@@ -345,7 +335,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="switch-mod" id="pn2">
       <img class="switch-layer" src="assets/switch-panel-c.png" alt="">
       <div class="sol-ov" id="so2">✓</div>
-      <div class="switch-hint">What things were piled in the way-back seat? Flip those ON. Flip everything else OFF.</div>
+      <div class="switch-hint">What was in the way-back seat? Flip those ON.</div>
       <button class="switch-toggle" id="sw-0" style="--x:20%;--y:39.5%" onclick="tSw(0)" aria-label="Toggle clothes"><img class="switch-img" src="assets/switch-off-c.png" alt=""></button>
       <div class="switch-label" style="--x:20%;--y:39.5%">clothes</div>
       <button class="switch-toggle" id="sw-1" style="--x:50%;--y:39.5%" onclick="tSw(1)" aria-label="Toggle television"><img class="switch-img" src="assets/switch-off-c.png" alt=""></button>
@@ -358,7 +348,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
       <div class="switch-label" style="--x:50%;--y:62.3%">blankets</div>
       <button class="switch-toggle" id="sw-5" style="--x:80%;--y:62.3%" onclick="tSw(5)" aria-label="Toggle piano"><img class="switch-img" src="assets/switch-off-c.png" alt=""></button>
       <div class="switch-label" style="--x:80%;--y:62.3%">piano</div>
-      <button class="switch-confirm" onclick="cfm(2)">CONFIRM ↵</button>
     </div>
   </div>
 
@@ -367,8 +356,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="keypad-mod" id="pn3">
       <img class="keypad-layer" src="assets/keypad-panel-c.png" alt="">
       <div class="sol-ov" id="so3">✓</div>
-      <div class="keypad-hint">Find a word in the passage that means "needed." Type its first 3 letters.</div>
-      <div class="kp-display" id="kd">_ _ _</div>
+      <div class="keypad-hint">Find the word that means "needed."</div>
+      <div class="kp-display" id="kd"><span class="kp-slots" id="kd-slots">_ _ _</span><span class="kp-extra">XXXXXX</span></div>
       <button class="key-hit" style="--x:17.4%;--y:52.1%" onclick="kp('N')" aria-label="Key N"></button>
       <button class="key-hit" style="--x:38.7%;--y:52.1%" onclick="kp('E')" aria-label="Key E"></button>
       <button class="key-hit" style="--x:60.4%;--y:52.1%" onclick="kp('C')" aria-label="Key C"></button>
@@ -381,7 +370,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
       <button class="key-hit" style="--x:38.7%;--y:74%" onclick="kp('U')" aria-label="Key U"></button>
       <button class="key-hit" style="--x:60.4%;--y:74%" onclick="kp('L')" aria-label="Key L"></button>
       <button class="key-hit" style="--x:81.8%;--y:74%" onclick="kp('<')" aria-label="Backspace"></button>
-      <button class="keypad-confirm" onclick="cfm(3)">CONFIRM ↵</button>
     </div>
   </div>
 
@@ -390,7 +378,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="seat-mod" id="pn4">
       <img class="seat-layer" src="assets/seat-panel-c.png" alt="">
       <div class="sol-ov" id="so4">✓</div>
-      <div class="seat-hint">Where is everyone sitting in the van? Press the arrow to choose each person.</div>
+      <div class="seat-hint">Where is everyone sitting?</div>
       <div class="seat-choice" style="--y:33.7%"><div class="seat-val" id="seat-0">—</div><button class="seat-next" onclick="cyc(0,1)" aria-label="Next red seat"></button></div>
       <div class="seat-choice" style="--y:45.3%"><div class="seat-val" id="seat-1">—</div><button class="seat-next" onclick="cyc(1,1)" aria-label="Next orange seat"></button></div>
       <div class="seat-choice" style="--y:57.2%"><div class="seat-val" id="seat-2">—</div><button class="seat-next" onclick="cyc(2,1)" aria-label="Next blue seat"></button></div>
@@ -401,33 +389,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
   </div><!-- /puzzle-stack -->
   <aside id="puzzle-doc" aria-live="polite">
     <div class="doc-paper">
-      <div class="doc-stamp">A SNICKER OF MAGIC · CH. 1</div>
       <div class="doc-title">Passage Extract</div>
       <div class="doc-text" id="doc-text"></div>
     </div>
   </aside>
 </div><!-- /popup -->
 
-<!-- ── START ── -->
-<div id="start">
-  <div class="card">
-    <div class="card-ico">🔓</div>
-    <div class="card-title">Crack <span style="color:var(--led-red);font-style:italic">the Case</span></div>
-    <div class="card-sub">Solve all 5 devices in the room to open the door.<br>5 minutes on the clock. Tap a device to zoom in.</div>
-    <button class="card-btn" onclick="startGame()">Enter the Room</button>
-  </div>
-</div>
-
 <!-- ── LOCKED ── -->
 <div id="locked"><div class="card">
-  <div class="card-ico">🔒</div><div class="card-title red">Case Locked</div>
+  <div class="card-ico">🔒</div><div class="card-title red">Room Locked</div>
   <div class="card-sub" id="locked-sub">Time's up — the door is sealed.</div>
   <button class="card-btn" onclick="location.reload()">TRY AGAIN ↻</button>
 </div></div>
 
 <!-- ── WIN ── -->
 <div id="win"><div class="card">
-  <div class="card-ico">🚪</div><div class="card-title">Case Cracked</div>
+  <div class="card-ico">🚪</div><div class="card-title">Escaped</div>
   <div class="card-sub">All 5 devices unlocked — the door is open.</div>
   <button class="card-btn" onclick="location.reload()">Play Again</button>
 </div></div>
@@ -477,8 +454,9 @@ let gameLocked=false, started=false;
 
 // ── 시작 ──
 function startGame(){
-  document.getElementById('start').style.display='none';
+  if(started)return;
   started=true;
+  updateTimer();
   startTimer();
 }
 
@@ -561,7 +539,7 @@ function updateLights(){
 }
 
 // ── 모듈 상태 ──
-let selWires=new Set(), dialVal=1, keyStr='';
+let selWires=new Set(), dialVal=1, keyStr='', keypadBusy=false;
 const swState=[false,false,false,false,false,false];
 const CHARS=['—','Mama','Felicity','Frannie + Biscuit'];
 const seatIdx=[0,0,0];
@@ -579,14 +557,33 @@ function clearWireSelection(){
   selWires.clear();
 }
 function dDial(d){if(solved.has(1)||gameLocked)return;dialVal=Math.max(1,Math.min(9,dialVal+d));document.getElementById('dv').textContent=dialVal;}
+function switchCorrect(){
+  return [true,false,true,false,true,false].every((v,i)=>swState[i]===v);
+}
 function tSw(i){if(solved.has(2)||gameLocked)return;
   swState[i]=!swState[i];
   const btn=document.getElementById('sw-'+i);
   btn.classList.toggle('on',swState[i]);
-  btn.querySelector('.switch-img').src=swState[i]?'assets/switch-on-c.png':'assets/switch-off-c.png';}
-function kp(k){if(solved.has(3)||gameLocked)return;
-  if(k==='<')keyStr=keyStr.slice(0,-1); else if(keyStr.length<3)keyStr+=k;
-  document.getElementById('kd').textContent=keyStr.padEnd(3,'_').split('').join(' ');}
+  btn.querySelector('.switch-img').src=swState[i]?'assets/switch-on-c.png':'assets/switch-off-c.png';
+  if(switchCorrect())setTimeout(()=>cfm(2),120);
+}
+function updateKeypad(){
+  document.getElementById('kd-slots').textContent=keyStr.padEnd(3,'_').split('').join(' ');
+}
+function resetKeypad(){
+  keyStr='';
+  keypadBusy=false;
+  updateKeypad();
+}
+function kp(k){if(solved.has(3)||gameLocked||keypadBusy)return;
+  if(k==='<')keyStr=keyStr.slice(0,-1);
+  else if(keyStr.length<3)keyStr+=k;
+  updateKeypad();
+  if(keyStr.length===3){
+    keypadBusy=true;
+    setTimeout(()=>cfm(3),120);
+  }
+}
 function cyc(slot,dir){if(solved.has(4)||gameLocked)return;
   seatIdx[slot]=(seatIdx[slot]+dir+CHARS.length)%CHARS.length;
   document.getElementById('seat-'+slot).textContent=CHARS[seatIdx[slot]];}
@@ -598,8 +595,8 @@ function cfm(mid){
   if(mid===0){const a=new Set(['WALKED','SMILED']);ok=a.size===selWires.size&&[...a].every(w=>selWires.has(w));
     if(ok)selWires.forEach(w=>document.getElementById('w-'+w).classList.add('cut'));}
   else if(mid===1){ok=dialVal===6;}
-  else if(mid===2){ok=[true,false,true,false,true,false].every((v,i)=>swState[i]===v);}
-  else if(mid===3){ok=keyStr.toUpperCase()==='NEC'; if(!ok){keyStr='';document.getElementById('kd').textContent='_ _ _';}}
+  else if(mid===2){ok=switchCorrect();}
+  else if(mid===3){ok=keyStr.toUpperCase()==='NEC';}
   else if(mid===4){const d=CHARS[seatIdx[0]],f=CHARS[seatIdx[1]],b=CHARS[seatIdx[2]];
     ok=d==='Mama'&&f==='Felicity'&&b==='Frannie + Biscuit';}
 
@@ -617,6 +614,7 @@ function cfm(mid){
     const pn=document.getElementById('pn'+mid);
     pn.classList.add('wrong'); setTimeout(()=>pn.classList.remove('wrong'),420);
     if(mid===0) setTimeout(clearWireSelection,180);
+    if(mid===3) setTimeout(resetKeypad,420);
   }
 }
 
@@ -642,6 +640,7 @@ function fail(msg){
   setTimeout(()=>document.getElementById('locked').classList.add('show'),300);
 }
 
+startGame();
 </script>
 </body>
 </html>
