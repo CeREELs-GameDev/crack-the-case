@@ -65,14 +65,28 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
   transition:opacity .3s;z-index:50;}
 #dim.on{opacity:1;pointer-events:all;}
 #popup{position:fixed;z-index:60;top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(1.75);opacity:0;pointer-events:none;
-  transition:opacity .25s, transform .25s;width:min(340px,50vw);}
-#popup.on{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1.9);}
-#popup.wide{width:min(880px,92vw,135vh);transform:translate(-50%,-50%) scale(.96);}
-#popup.wide.on{transform:translate(-50%,-50%) scale(1);}
-.pz{display:none;}
+  --popup-scale:1;--popup-enter-scale:.92;
+  transform:translate(-50%,-50%) scale(var(--popup-enter-scale));opacity:0;pointer-events:none;
+  transition:opacity .25s, transform .25s;width:min(1220px,96vw);
+  display:grid;grid-template-columns:minmax(0,940px) 300px;align-items:center;gap:24px;}
+#popup.on{opacity:1;pointer-events:none;transform:translate(-50%,-50%) scale(var(--popup-scale));}
+#puzzle-stack{width:100%;display:grid;justify-items:end;pointer-events:none;}
+.pz{display:none;width:100%;justify-items:end;pointer-events:none;}
+.pz.show{display:grid;}
+#puzzle-doc{width:300px;max-height:78vh;background:transparent;pointer-events:none;}
+.doc-paper{max-height:78vh;overflow:auto;background:var(--manila);border-radius:3px;padding:16px 16px 20px;
+  box-shadow:2px 3px 14px rgba(0,0,0,.5);pointer-events:auto;}
+.doc-stamp{font-family:var(--font-ui);font-size:9px;color:#6a1008;border:1.5px solid #6a1008;
+  padding:2px 7px;display:inline-block;transform:rotate(-1.5deg);margin-bottom:12px;letter-spacing:2px;opacity:.75;}
+.doc-title{font-family:var(--font-title);font-size:14px;color:#0a0e14;font-weight:700;margin-bottom:12px;}
+.doc-text{font-family:var(--font-copy);font-size:15px;line-height:2.05;color:#0a0e14;}
+.doc-red{border-bottom:2.5px solid #e03020;font-weight:600;}
+@media (max-width:900px){
+  #popup{width:min(92vw,680px);grid-template-columns:1fr;}
+  #puzzle-doc{display:none;}
+}
 /* M01 전선 모듈 (이미지 레이어 — 틀+전선 png 위에 텍스트 오버레이) */
-.wire-mod{position:relative;width:100%;aspect-ratio:585/491;}
+.wire-mod{position:relative;width:100%;max-width:840px;aspect-ratio:585/491;pointer-events:auto;}
 .wm-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
 .wm-wire{transition:opacity .35s, filter .2s;}
 .wm-wire.cut{opacity:.08;}
@@ -94,8 +108,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
   font-family:var(--font-ui);font-size:var(--type-action);letter-spacing:.5px;color:rgba(20,28,40,.9);}
 .wm-cut:hover{color:#000;}
 .wm-cut:active{transform:translate(-50%,-50%) scale(.95);}
-.pz.show{display:flex;flex-direction:column;}
-
 /* 모듈 패널 */
 .panel{background:var(--panel);border-radius:10px;border:2px solid var(--case-edge);
   box-shadow:0 24px 60px rgba(0,0,0,.7),inset 2px 2px 6px rgba(0,0,0,.4);
@@ -131,7 +143,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
   width:64px;text-align:right;flex-shrink:0;}
 
 /* DIAL */
-.dial-mod{position:relative;width:100%;aspect-ratio:589/402;}
+.dial-mod{position:relative;width:100%;max-width:620px;aspect-ratio:589/402;pointer-events:auto;}
 .dial-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
 .dial-mod.wrong{animation:dialWrong .4s ease;}
 @keyframes dialWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
@@ -160,7 +172,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 .dbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3);}
 
 /* SWITCHES */
-.switch-mod{position:relative;width:100%;aspect-ratio:589/527;}
+.switch-mod{position:relative;width:100%;max-width:620px;aspect-ratio:589/527;pointer-events:auto;}
 .switch-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
 .switch-mod.wrong{animation:switchWrong .4s ease;}
 @keyframes switchWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
@@ -182,7 +194,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 .switch-confirm:active{transform:translate(-50%,-50%) scale(.96);background:transparent;outline:none;}
 
 /* KEYPAD */
-.keypad-mod{position:relative;width:100%;aspect-ratio:589/557;}
+.keypad-mod{position:relative;width:100%;max-width:620px;aspect-ratio:589/557;pointer-events:auto;}
 .keypad-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
 .keypad-mod.wrong{animation:keypadWrong .4s ease;}
 @keyframes keypadWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
@@ -203,25 +215,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
 .keypad-confirm:active{transform:translate(-50%,-50%) scale(.96);background:transparent;outline:none;}
 
 /* SEATING */
-.seat-mod{position:relative;width:100%;aspect-ratio:588/526;}
+.seat-mod{position:relative;width:100%;max-width:620px;aspect-ratio:1181/1239;pointer-events:auto;}
 .seat-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
 .seat-mod.wrong{animation:seatWrong .4s ease;}
 @keyframes seatWrong{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(220,40,20,.75)) saturate(1.25)}}
-.seat-hint{position:absolute;top:21.2%;left:49.2%;width:86%;height:11.6%;transform:translate(-50%,-50%);
+.seat-hint{position:absolute;top:20%;left:50.3%;width:84.5%;height:10.5%;transform:translate(-50%,-50%);
   display:flex;align-items:center;justify-content:center;text-align:center;padding:0 4%;line-height:1.15;
-  font-family:var(--font-note);font-size:14px;color:rgba(20,28,40,.92);}
-.seat-choice{position:absolute;left:13.5%;top:var(--y);width:84.8%;height:11.4%;transform:translateY(-50%);}
-.seat-name{position:absolute;left:0;top:50%;width:35%;height:100%;transform:translateY(-50%);
-  display:grid;place-items:center;text-align:center;line-height:1;
-  font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:1.9px;color:rgba(240,228,200,.84);}
-.seat-val{position:absolute;left:48.4%;top:50%;width:31.4%;height:100%;transform:translateY(-50%);
+  font-family:var(--font-note);font-size:13px;color:rgba(20,28,40,.92);}
+.seat-choice{position:absolute;left:54.9%;top:var(--y);width:42.6%;height:11.2%;transform:translateY(-50%);}
+.seat-val{position:absolute;left:0;top:0;width:68.5%;height:100%;
   display:grid;place-items:center;text-align:center;padding:0;
   font-family:var(--font-copy);font-size:16px;font-style:italic;color:rgba(20,28,40,.9);line-height:1;}
-.seat-next{position:absolute;left:80.9%;top:50%;width:13%;height:100%;transform:translateY(-50%);
+.seat-next{position:absolute;right:0;top:0;width:31.5%;height:100%;
   background:transparent;border:none;cursor:pointer;padding:0;outline:none;-webkit-tap-highlight-color:transparent;}
 .seat-next:hover,.seat-next:focus,.seat-next:focus-visible{background:transparent;outline:none;}
-.seat-next:active{transform:translateY(-50%) scale(.96);background:transparent;outline:none;}
-.seat-confirm{position:absolute;left:49.5%;top:87%;width:37%;height:11.6%;transform:translate(-50%,-50%);
+.seat-next:active{transform:scale(.96);background:transparent;outline:none;}
+.seat-confirm{position:absolute;left:50%;top:86.1%;width:35.5%;height:11%;transform:translate(-50%,-50%);
   background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1;
   font-family:var(--font-ui);font-size:12px;letter-spacing:2px;color:rgba(20,28,40,.86);}
 .seat-confirm:hover{color:#000;}
@@ -234,49 +243,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
   display:flex;align-items:center;justify-content:center;line-height:1;}
 .cfm:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.4);}
 
-/* ── 힌트 카드 덱 (하단, 평소 살짝 튀어나옴 / 누르면 올라옴) ── */
-#clue-deck{position:absolute;left:0;right:0;bottom:0;z-index:42;
-  display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,1.2cqw,18px);
-  padding:0 1.1cqw;pointer-events:none;}
-.clue-card{pointer-events:auto;position:relative;
-  width:18%;height:24.5cqh;
-  background:var(--manila);border-radius:5px 5px 0 0;
-  box-shadow:0 -6px 22px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2);
-  cursor:pointer;display:flex;flex-direction:column;overflow:hidden;
-  transform:translateY(74%);transition:transform .28s cubic-bezier(.3,.9,.3,1);}
-.clue-card::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);
-  width:18%;height:6%;background:rgba(200,185,140,.7);border-radius:1px;
-  box-shadow:0 1px 3px rgba(0,0,0,.25);z-index:2;}
-.clue-card:hover{transform:translateY(62%);}
-.clue-card.up{transform:translateY(5%);z-index:10;box-shadow:0 -12px 34px rgba(0,0,0,.6);}
-.cc-strip{height:6%;width:100%;flex-shrink:0;}
-.cc-body{padding:7% 7%;flex:1;display:flex;flex-direction:column;gap:5%;}
-.cc-id{font-family:var(--font-ui);font-size:clamp(7px,.72cqw,10px);letter-spacing:1.5px;color:rgba(0,0,0,.42);text-align:center;}
-.cc-text{font-family:var(--font-note);font-size:clamp(11px,1.22cqw,16px);color:rgba(0,0,0,.8);line-height:1.35;text-align:center;}
-.clue-card.done .cc-text{text-decoration:line-through;color:rgba(0,0,0,.4);}
-.cc-check{position:absolute;right:4%;bottom:4%;font-size:clamp(12px,1.2cqw,16px);color:rgba(50,130,20,.85);opacity:0;}
-.clue-card.done .cc-check{opacity:1;}
-
-/* ── EXCERPT (본문) ── */
-#excerpt-tab{position:absolute;top:50%;right:0;transform:translateY(-50%);z-index:40;cursor:pointer;}
-#tab-body{background:var(--manila);border:1.5px solid rgba(0,0,0,.15);border-right:none;border-radius:8px 0 0 8px;
-  padding:12px 8px;box-shadow:-3px 0 16px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;gap:6px;}
-.tab-lbl{font-family:var(--font-ui);font-size:var(--type-micro);letter-spacing:2px;color:rgba(0,0,0,.45);writing-mode:vertical-lr;transform:rotate(180deg);}
-#ex-drawer{position:fixed;top:0;bottom:0;right:-340px;width:320px;z-index:70;background:rgba(10,14,20,.99);
-  transition:right .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-6px 0 30px rgba(0,0,0,.8);}
-#ex-drawer.open{right:0;}
-#ex-hdr{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;}
-#ex-hdr-txt{font-family:var(--font-ui);font-size:9px;letter-spacing:2px;color:rgba(240,228,200,.3);}
-#ex-close{background:transparent;border:none;color:rgba(240,228,200,.4);font-size:22px;cursor:pointer;}
-#ex-scroll{flex:1;overflow-y:auto;padding:14px;}
-#ex-paper{background:var(--manila);border-radius:3px;padding:14px 14px 18px;box-shadow:2px 3px 14px rgba(0,0,0,.5);}
-.ex-stamp{font-family:var(--font-ui);font-size:9px;color:#6a1008;border:1.5px solid #6a1008;
-  padding:2px 7px;display:inline-block;transform:rotate(-1.5deg);margin-bottom:10px;letter-spacing:2px;opacity:.75;}
-.ex-title{font-family:var(--font-title);font-size:14px;color:#0a0e14;font-weight:700;margin-bottom:10px;}
-.ex-text{font-family:var(--font-copy);font-size:15px;line-height:2.1;color:#0a0e14;}
-.h1{border-bottom:2.5px solid #e03020;font-weight:600;}
-#exbd{position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .3s;}
-#exbd.on{opacity:1;pointer-events:all;}
 
 /* ── START / WIN / LOCKED ── */
 #start,#locked,#win{position:fixed;inset:0;z-index:300;background:rgba(10,14,20,.96);
@@ -328,23 +294,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="region" id="rg-keypad"   onclick="openPz(3)"></div>
     <div class="region" id="rg-door"     onclick="tryDoor()"></div>
 
-    <!-- ── 힌트 카드 덱 ── -->
-    <div id="clue-deck">
-      <div class="clue-card" id="cc0" onclick="toggleClue(0)"><div class="cc-strip" style="background:var(--manila)"></div><div class="cc-body"><div class="cc-id">M01 · WIRES</div><div class="cc-text">Cut the ones that don't mean the same as the red word.</div></div><span class="cc-check">✓</span></div>
-      <div class="clue-card" id="cc1" onclick="toggleClue(1)"><div class="cc-strip" style="background:var(--manila)"></div><div class="cc-body"><div class="cc-id">M02 · DIAL</div><div class="cc-text">Candles on Frannie's next birthday cake.</div></div><span class="cc-check">✓</span></div>
-      <div class="clue-card" id="cc2" onclick="toggleClue(2)"><div class="cc-strip" style="background:var(--manila)"></div><div class="cc-body"><div class="cc-id">M03 · SWITCHES</div><div class="cc-text">Flip ON what was in the pile.</div></div><span class="cc-check">✓</span></div>
-      <div class="clue-card" id="cc3" onclick="toggleClue(3)"><div class="cc-strip" style="background:var(--manila)"></div><div class="cc-body"><div class="cc-id">M04 · KEYPAD</div><div class="cc-text">The word that means "needed." First 3 letters.</div></div><span class="cc-check">✓</span></div>
-      <div class="clue-card" id="cc4" onclick="toggleClue(4)"><div class="cc-strip" style="background:var(--manila)"></div><div class="cc-body"><div class="cc-id">M05 · SEATING</div><div class="cc-text">Place everyone in the right seat.</div></div><span class="cc-check">✓</span></div>
-    </div>
-
-    <!-- ── EXCERPT 탭 ── -->
-    <div id="excerpt-tab" onclick="openEx()"><div id="tab-body"><div style="font-size:18px">📄</div><div class="tab-lbl">EXCERPT</div></div></div>
   </div>
 </div>
 
 <!-- ── dim + 퍼즐 팝업 ── -->
-<div id="dim" onclick="closePz()"></div>
+<div id="dim" onpointerdown="closePz()"></div>
 <div id="popup">
+  <div id="puzzle-stack">
 
   <!-- M01 WIRES -->
   <div class="pz" id="pz0">
@@ -355,7 +311,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
       <img class="wm-layer wm-wire" id="w-LOOKED"   src="assets/wire-white-c.png" alt="">
       <img class="wm-layer wm-wire" id="w-SMILED"   src="assets/wire-yellow-c.png" alt="">
       <img class="wm-layer wm-wire" id="w-GLIMPSED" src="assets/wire-black-c.png" alt="">
-      <div class="wm-hint">Cut the ones that don't mean the same as the red word.</div>
+      <div class="wm-hint">Look at the word underlined in red. Cut the wires that do NOT mean the same thing.</div>
       <button class="wm-word" id="wb-PEEKED"   style="top:36.3%" onclick="selWire('PEEKED')">PEEKED</button>
       <button class="wm-word" id="wb-WALKED"   style="top:45.7%" onclick="selWire('WALKED')">WALKED</button>
       <button class="wm-word" id="wb-LOOKED"   style="top:55.2%" onclick="selWire('LOOKED')">LOOKED</button>
@@ -376,7 +332,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="dial-mod" id="pn1">
       <img class="dial-layer" src="assets/dial-panel-c.png" alt="">
       <div class="sol-ov" id="so1">✓</div>
-      <div class="dial-hint">Candles on Frannie's next birthday cake.</div>
+      <div class="dial-hint">How old will Frannie be on her next birthday? Set the dial to that number.</div>
       <button class="dial-step plus" onclick="dDial(1)" aria-label="Increase dial"><img src="assets/dial-plus-c.png" alt=""></button>
       <button class="dial-step minus" onclick="dDial(-1)" aria-label="Decrease dial"><img src="assets/dial-minus-c.png" alt=""></button>
       <div class="dial-value"><span id="dv">1</span></div>
@@ -389,7 +345,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="switch-mod" id="pn2">
       <img class="switch-layer" src="assets/switch-panel-c.png" alt="">
       <div class="sol-ov" id="so2">✓</div>
-      <div class="switch-hint">Flip ON what was in the pile.</div>
+      <div class="switch-hint">What things were piled in the way-back seat? Flip those ON. Flip everything else OFF.</div>
       <button class="switch-toggle" id="sw-0" style="--x:20%;--y:39.5%" onclick="tSw(0)" aria-label="Toggle clothes"><img class="switch-img" src="assets/switch-off-c.png" alt=""></button>
       <div class="switch-label" style="--x:20%;--y:39.5%">clothes</div>
       <button class="switch-toggle" id="sw-1" style="--x:50%;--y:39.5%" onclick="tSw(1)" aria-label="Toggle television"><img class="switch-img" src="assets/switch-off-c.png" alt=""></button>
@@ -411,7 +367,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="keypad-mod" id="pn3">
       <img class="keypad-layer" src="assets/keypad-panel-c.png" alt="">
       <div class="sol-ov" id="so3">✓</div>
-      <div class="keypad-hint">Find the word that means "needed." Write the first 3 letters.</div>
+      <div class="keypad-hint">Find a word in the passage that means "needed." Type its first 3 letters.</div>
       <div class="kp-display" id="kd">_ _ _</div>
       <button class="key-hit" style="--x:17.4%;--y:52.1%" onclick="kp('N')" aria-label="Key N"></button>
       <button class="key-hit" style="--x:38.7%;--y:52.1%" onclick="kp('E')" aria-label="Key E"></button>
@@ -434,27 +390,23 @@ html,body{width:100%;height:100%;overflow:hidden;background:#15171c;
     <div class="seat-mod" id="pn4">
       <img class="seat-layer" src="assets/seat-panel-c.png" alt="">
       <div class="sol-ov" id="so4">✓</div>
-      <div class="seat-hint">Place everyone in the right seat.</div>
-      <div class="seat-choice" style="--y:35.5%"><div class="seat-name">DRIVER</div><div class="seat-val" id="seat-0">—</div><button class="seat-next" onclick="cyc(0,1)" aria-label="Next driver"></button></div>
-      <div class="seat-choice" style="--y:48.3%"><div class="seat-name">FRONT</div><div class="seat-val" id="seat-1">—</div><button class="seat-next" onclick="cyc(1,1)" aria-label="Next front seat"></button></div>
-      <div class="seat-choice" style="--y:60.8%"><div class="seat-name">BACK</div><div class="seat-val" id="seat-2">—</div><button class="seat-next" onclick="cyc(2,1)" aria-label="Next back seat one"></button></div>
-      <div class="seat-choice" style="--y:73.4%"><div class="seat-name">BACK</div><div class="seat-val" id="seat-3">—</div><button class="seat-next" onclick="cyc(3,1)" aria-label="Next back seat two"></button></div>
+      <div class="seat-hint">Where is everyone sitting in the van? Press the arrow to choose each person.</div>
+      <div class="seat-choice" style="--y:33.7%"><div class="seat-val" id="seat-0">—</div><button class="seat-next" onclick="cyc(0,1)" aria-label="Next red seat"></button></div>
+      <div class="seat-choice" style="--y:45.3%"><div class="seat-val" id="seat-1">—</div><button class="seat-next" onclick="cyc(1,1)" aria-label="Next orange seat"></button></div>
+      <div class="seat-choice" style="--y:57.2%"><div class="seat-val" id="seat-2">—</div><button class="seat-next" onclick="cyc(2,1)" aria-label="Next blue seat"></button></div>
       <button class="seat-confirm" onclick="cfm(4)">CONFIRM ↵</button>
     </div>
   </div>
 
+  </div><!-- /puzzle-stack -->
+  <aside id="puzzle-doc" aria-live="polite">
+    <div class="doc-paper">
+      <div class="doc-stamp">A SNICKER OF MAGIC · CH. 1</div>
+      <div class="doc-title">Passage Extract</div>
+      <div class="doc-text" id="doc-text"></div>
+    </div>
+  </aside>
 </div><!-- /popup -->
-
-<!-- ── EXCERPT ── -->
-<div id="exbd" onclick="closeEx()"></div>
-<div id="ex-drawer">
-  <div id="ex-hdr"><span id="ex-hdr-txt">EVIDENCE DOCUMENT A</span><button id="ex-close" onclick="closeEx()">✕</button></div>
-  <div id="ex-scroll"><div id="ex-paper">
-    <div class="ex-stamp">A SNICKER OF MAGIC · CH. 1</div>
-    <div class="ex-title">Passage Extract</div>
-    <div class="ex-text">"I see you." Mama smiled. "And I see Frannie Jo sleeping right behind me." She <span class="h1">glanced</span> up in the rearview mirror at my little sister, who was snuggled up with our dog, Biscuit. Both of them were snoring sweetly, cuddled against all the clothes that we'd piled in the way-back seat. Frannie's nearly six, but people think she's even younger than that because she's so small. She blended in easy with the books and blankets and clothes. "I got all the magic I ever need here with me," Mama sighed. I smiled at her words. I wanted them to be true, but I knew Frannie and I didn't have the kind of magic necessary to get rid of Mama's sad. But maybe that kind of magic did exist somewhere.</div>
-  </div></div>
-</div>
 
 <!-- ── START ── -->
 <div id="start">
@@ -547,21 +499,56 @@ function updateTimer(){
 }
 
 // ── 퍼즐 팝업 ──
+const CLUE_DOCS=[
+  `"I see you." Mama smiled. "And I see Frannie Jo sleeping right behind me." She <span class="doc-red">glanced</span> up in the rearview mirror at my little sister, who was snuggled up with our dog, Biscuit.`,
+  `She glanced up in the rearview mirror at my little sister, who was snuggled up with our dog, Biscuit. Both of them were snoring sweetly, cuddled against all the clothes that we'd piled in the way-back seat. Frannie's nearly six, but people think she's even younger than that because she's so small. She blended in easy with the books and blankets and clothes.`,
+  `She glanced up in the rearview mirror at my little sister, who was snuggled up with our dog, Biscuit. Both of them were snoring sweetly, cuddled against all the clothes that we'd piled in the way-back seat. Frannie's nearly six, but people think she's even younger than that because she's so small. She blended in easy with the books and blankets and clothes.`,
+  `I smiled at her words. I wanted them to be true, but I knew Frannie and I didn't have the kind of magic necessary to get rid of Mama's sad. But maybe that kind of magic did exist somewhere.`,
+  `"I see you." Mama smiled. "And I see Frannie Jo sleeping right behind me." She glanced up in the rearview mirror at my little sister, who was snuggled up with our dog, Biscuit. Both of them were snoring sweetly, cuddled against all the clothes that we'd piled in the way-back seat.`
+];
 let curPz=-1;
+function renderDoc(mid){
+  document.getElementById('doc-text').innerHTML=CLUE_DOCS[mid]||'';
+}
+function popupViewport(){
+  const vv=window.visualViewport;
+  if(vv)return{w:vv.width,h:vv.height};
+  return{w:window.innerWidth||document.documentElement.clientWidth,h:window.innerHeight||document.documentElement.clientHeight};
+}
+function fitPopup(){
+  if(curPz<0)return;
+  const popup=document.getElementById('popup');
+  const v=popupViewport();
+  const target=1;
+  const w=popup.offsetWidth||1,h=popup.offsetHeight||1;
+  const fitted=Math.max(.45,Math.min(target,(v.w*.92)/w,(v.h*.92)/h));
+  popup.style.setProperty('--popup-scale',fitted.toFixed(4));
+  popup.style.setProperty('--popup-enter-scale',Math.max(.45,fitted*.92).toFixed(4));
+}
 function openPz(mid){
   if(!started||gameLocked)return;
   curPz=mid;
   document.querySelectorAll('.pz').forEach(p=>p.classList.remove('show'));
   document.getElementById('pz'+mid).classList.add('show');
+  renderDoc(mid);
   document.getElementById('dim').classList.add('on');
   const popup=document.getElementById('popup');
-  popup.classList.toggle('wide', mid===0);   // M01은 가로형 큰 모듈
+  fitPopup();
   popup.classList.add('on');
+  requestAnimationFrame(fitPopup);
 }
 function closePz(){
   document.getElementById('dim').classList.remove('on');
   document.getElementById('popup').classList.remove('on');
+  document.querySelectorAll('.pz').forEach(p=>p.classList.remove('show'));
+  document.getElementById('doc-text').innerHTML='';
   curPz=-1;
+}
+addEventListener('resize',fitPopup);
+addEventListener('orientationchange',fitPopup);
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fitPopup);
+  visualViewport.addEventListener('scroll',fitPopup);
 }
 
 // ── 진행 조명 / 영역 표시 ──
@@ -576,8 +563,8 @@ function updateLights(){
 // ── 모듈 상태 ──
 let selWires=new Set(), dialVal=1, keyStr='';
 const swState=[false,false,false,false,false,false];
-const CHARS=['—','Mama','Felicity','Frannie','Biscuit'];
-const seatIdx=[0,0,0,0];
+const CHARS=['—','Mama','Felicity','Frannie + Biscuit'];
+const seatIdx=[0,0,0];
 
 function selWire(word){if(solved.has(0)||gameLocked)return;
   const on=selWires.has(word);
@@ -613,14 +600,14 @@ function cfm(mid){
   else if(mid===1){ok=dialVal===6;}
   else if(mid===2){ok=[true,false,true,false,true,false].every((v,i)=>swState[i]===v);}
   else if(mid===3){ok=keyStr.toUpperCase()==='NEC'; if(!ok){keyStr='';document.getElementById('kd').textContent='_ _ _';}}
-  else if(mid===4){const d=CHARS[seatIdx[0]],f=CHARS[seatIdx[1]],b=new Set([CHARS[seatIdx[2]],CHARS[seatIdx[3]]]);
-    ok=d==='Mama'&&f==='Felicity'&&b.has('Frannie')&&b.has('Biscuit');}
+  else if(mid===4){const d=CHARS[seatIdx[0]],f=CHARS[seatIdx[1]],b=CHARS[seatIdx[2]];
+    ok=d==='Mama'&&f==='Felicity'&&b==='Frannie + Biscuit';}
 
   if(ok){
     solved.add(mid);
     document.getElementById('so'+mid).classList.add('on');
     const _led=document.getElementById('led'+mid); if(_led)_led.classList.add('on');
-    document.getElementById('cc'+mid).classList.add('done');
+    const _cc=document.getElementById('cc'+mid); if(_cc)_cc.classList.add('done');
     const rg={0:'rg-wires',1:'rg-safe',2:'rg-switches',3:'rg-keypad',4:'rg-lock'}[mid];
     document.getElementById(rg).classList.add('solved');
     updateLights();
@@ -655,21 +642,6 @@ function fail(msg){
   setTimeout(()=>document.getElementById('locked').classList.add('show'),300);
 }
 
-// ── 힌트 카드 덱 ──
-function toggleClue(i){
-  const c=document.getElementById('cc'+i);
-  const wasUp=c.classList.contains('up');
-  document.querySelectorAll('.clue-card').forEach(x=>x.classList.remove('up'));
-  if(!wasUp)c.classList.add('up');
-}
-// 카드 밖 어디든 누르면 내려감
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.clue-card')) document.querySelectorAll('.clue-card').forEach(x=>x.classList.remove('up'));
-});
-
-// ── EXCERPT ──
-function openEx(){document.getElementById('ex-drawer').classList.add('open');document.getElementById('exbd').classList.add('on');}
-function closeEx(){document.getElementById('ex-drawer').classList.remove('open');document.getElementById('exbd').classList.remove('on');}
 </script>
 </body>
 </html>
